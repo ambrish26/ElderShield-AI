@@ -1,45 +1,26 @@
 from typing import List
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class AnalyzeRequest(BaseModel):
-    """
-    The message submitted by the user for analysis.
-    """
-
-    message: str = Field(
-        ...,
-        min_length=1,
-        max_length=5000,
-        description="The communication message to analyze."
-    )
+    message: str
 
 
 class Signal(BaseModel):
-    """
-    A potentially suspicious signal detected in a message.
-    """
-
     type: str
     evidence: List[str]
     description: str
 
 
+class Intent(BaseModel):
+    intent: str
+    evidence: List[str]
+
+
 class AnalyzeResponse(BaseModel):
-    """
-    Structured result returned after message analysis.
-    """
-
-    risk_score: int = Field(
-        ...,
-        ge=0,
-        le=100
-    )
-
+    risk_score: int
     risk_level: str
-
     signals: List[Signal]
-
+    intents: List[Intent]
     explanation: str
-
     recommended_action: str
